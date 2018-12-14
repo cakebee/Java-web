@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.CourseStuMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.CourseStu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+  </resultMap>
+
+  <resultMap id="RankResultMap" type="com.CourseManage.pojo.stuScoreRank">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+  </resultMap>
+
+  <sql id="Rank_Column_List">
+    id, userid, courseid, score, rank
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, userid, courseid, score
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course_stu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="checkMyParticipateCourse" parameterType="com.CourseManage.pojo.CourseStu" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_stu
+    where userid = #{userid,jdbcType=VARCHAR} and courseid = #{courseid,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_stu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteMyParticipateCourse" parameterType="Map">
+    delete from course_stu
+    where userid = #{username,jdbcType=VARCHAR} and courseid = #{courseid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.CourseManage.pojo.CourseStu">
+    insert into course_stu (id, userid, courseid, 
+      score)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{courseid,jdbcType=INTEGER}, 
+      #{score,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.CourseStu">
+    insert into course_stu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="courseid != null">
+        courseid,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="courseid != null">
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.CourseStu">
+    update course_stu
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="courseid != null">
+        courseid = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.CourseStu">
+    update course_stu
+    set userid = #{userid,jdbcType=VARCHAR},
+      courseid = #{courseid,jdbcType=INTEGER},
+      score = #{score,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMyParticipateCourseCount" parameterType="String" resultType="int">
+    select count(*) from course_stu
+    where userid = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectMyParticipateCourseByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_stu
+    where userid = #{username,jdbcType=VARCHAR}
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectHotCourse" resultType="int">
+    select courseid,count(courseid) as nums from course_stu group by courseid order by nums desc
+    limit 0,2
+  </select>
+
+  <select id="selectStuScoreRank" parameterType="java.lang.Integer" resultMap="RankResultMap">
+    select  <include refid="Base_Column_List" /> ,(select count(s.score)+1 from course_stu s where s.score>t.score and s.courseid = #{courseid,jdbcType=INTEGER}) as rank
+    from course_stu as t where t.courseid = #{courseid,jdbcType=INTEGER}
+    order by t.score desc
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectStuScoreRankCount" parameterType="java.lang.Integer" resultType="int">
+    select
+    count(*)
+    from course_stu
+    where courseid = #{courseid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectMyCourseScore" parameterType="Map" resultType="int">
+    select
+    score
+    from course_stu
+    where courseid = #{courseid,jdbcType=INTEGER} and userid = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateScoreByUIDCourseID" parameterType="Map">
+    update course_stu
+    set
+      score = #{score,jdbcType=INTEGER}
+    where courseid = #{courseid,jdbcType=INTEGER} and userid = #{username,jdbcType=VARCHAR}
+
+  </update>
+
+
+</mapper>

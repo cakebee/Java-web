@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.CourseImageMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.CourseImage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.CourseManage.pojo.CourseImage">
+    <result column="course_image" jdbcType="LONGVARBINARY" property="courseImage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, courseid
+  </sql>
+  <sql id="Blob_Column_List">
+    course_image
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course_image
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_image
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.CourseManage.pojo.CourseImage">
+    insert into course_image (id, courseid, course_image
+      )
+    values (#{id,jdbcType=INTEGER}, #{courseid,jdbcType=INTEGER}, #{courseImage,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.CourseImage">
+    insert into course_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseid != null">
+        courseid,
+      </if>
+      <if test="courseImage != null">
+        course_image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseid != null">
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="courseImage != null">
+        #{courseImage,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.CourseImage">
+    update course_image
+    <set>
+      <if test="courseid != null">
+        courseid = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="courseImage != null">
+        course_image = #{courseImage,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.CourseManage.pojo.CourseImage">
+    update course_image
+    set courseid = #{courseid,jdbcType=INTEGER},
+      course_image = #{courseImage,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.CourseImage">
+    update course_image
+    set courseid = #{courseid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateCourseImageByCourseid" parameterType="com.CourseManage.pojo.CourseImage" >
+    update course_image
+    set course_image = #{courseImage,jdbcType=LONGVARBINARY}
+    where courseid = #{courseid,jdbcType=INTEGER}
+  </update>
+  <select id="selectBycourseid" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course_image
+    where courseid = #{courseid,jdbcType=INTEGER}
+  </select>
+</mapper>

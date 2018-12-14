@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.CourseIndexMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.CourseIndex">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="course_resid" jdbcType="INTEGER" property="courseResid" />
+    <result column="chapter" jdbcType="INTEGER" property="chapter" />
+    <result column="chaprt_title" jdbcType="VARCHAR" property="chaprtTitle" />
+    <result column="part" jdbcType="INTEGER" property="part" />
+    <result column="part_title" jdbcType="VARCHAR" property="partTitle" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="video" jdbcType="INTEGER" property="video" />
+    <result column="word" jdbcType="INTEGER" property="word" />
+    <result column="pdf" jdbcType="INTEGER" property="pdf" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, course_resid, chapter, chaprt_title, part, part_title, courseid, type, video, 
+    word, pdf
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course_index
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCourseID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_index
+    where courseid = #{courseid,jdbcType=INTEGER}
+    order by chapter asc, part asc
+  </select>
+
+  <select id="selectByCourseIDChapterPart" parameterType="com.CourseManage.pojo.CourseIndex" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_index
+    where courseid = #{courseid,jdbcType=INTEGER} and chapter = #{chapter,jdbcType=INTEGER} and part = #{part,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByVideoID" parameterType="int" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_index
+    where video = #{videoID,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_index
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.CourseManage.pojo.CourseIndex">
+    insert into course_index (id, course_resid, chapter, 
+      chaprt_title, part, part_title, 
+      courseid, type, video, 
+      word, pdf)
+    values (#{id,jdbcType=INTEGER}, #{courseResid,jdbcType=INTEGER}, #{chapter,jdbcType=INTEGER}, 
+      #{chaprtTitle,jdbcType=VARCHAR}, #{part,jdbcType=INTEGER}, #{partTitle,jdbcType=VARCHAR}, 
+      #{courseid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{video,jdbcType=INTEGER}, 
+      #{word,jdbcType=INTEGER}, #{pdf,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.CourseIndex">
+    insert into course_index
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseResid != null">
+        course_resid,
+      </if>
+      <if test="chapter != null">
+        chapter,
+      </if>
+      <if test="chaprtTitle != null">
+        chaprt_title,
+      </if>
+      <if test="part != null">
+        part,
+      </if>
+      <if test="partTitle != null">
+        part_title,
+      </if>
+      <if test="courseid != null">
+        courseid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="video != null">
+        video,
+      </if>
+      <if test="word != null">
+        word,
+      </if>
+      <if test="pdf != null">
+        pdf,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseResid != null">
+        #{courseResid,jdbcType=INTEGER},
+      </if>
+      <if test="chapter != null">
+        #{chapter,jdbcType=INTEGER},
+      </if>
+      <if test="chaprtTitle != null">
+        #{chaprtTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="part != null">
+        #{part,jdbcType=INTEGER},
+      </if>
+      <if test="partTitle != null">
+        #{partTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="courseid != null">
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        #{video,jdbcType=INTEGER},
+      </if>
+      <if test="word != null">
+        #{word,jdbcType=INTEGER},
+      </if>
+      <if test="pdf != null">
+        #{pdf,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.CourseIndex">
+    update course_index
+    <set>
+      <if test="courseResid != null">
+        course_resid = #{courseResid,jdbcType=INTEGER},
+      </if>
+      <if test="chapter != null">
+        chapter = #{chapter,jdbcType=INTEGER},
+      </if>
+      <if test="chaprtTitle != null">
+        chaprt_title = #{chaprtTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="part != null">
+        part = #{part,jdbcType=INTEGER},
+      </if>
+      <if test="partTitle != null">
+        part_title = #{partTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="courseid != null">
+        courseid = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        video = #{video,jdbcType=INTEGER},
+      </if>
+      <if test="word != null">
+        word = #{word,jdbcType=INTEGER},
+      </if>
+      <if test="pdf != null">
+        pdf = #{pdf,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.CourseIndex">
+    update course_index
+    set course_resid = #{courseResid,jdbcType=INTEGER},
+      chapter = #{chapter,jdbcType=INTEGER},
+      chaprt_title = #{chaprtTitle,jdbcType=VARCHAR},
+      part = #{part,jdbcType=INTEGER},
+      part_title = #{partTitle,jdbcType=VARCHAR},
+      courseid = #{courseid,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      video = #{video,jdbcType=INTEGER},
+      word = #{word,jdbcType=INTEGER},
+      pdf = #{pdf,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateVideoByPK" parameterType="com.CourseManage.pojo.CourseIndex">
+    update course_index
+    set video = #{video,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updatePDFByPK" parameterType="com.CourseManage.pojo.CourseIndex">
+    update course_index
+    set pdf = #{pdf,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateWordByPK" parameterType="com.CourseManage.pojo.CourseIndex">
+    update course_index
+    set word = #{word,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.WorkScoreMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.WorkScore">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="workid" jdbcType="INTEGER" property="workid" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="chapter" jdbcType="INTEGER" property="chapter" />
+    <result column="part" jdbcType="INTEGER" property="part" />
+    <result column="isreaded" jdbcType="TINYINT" property="isreaded" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, workid, userid, score, chapter, part, isreaded, filename
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from work_score
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCountByWorkID" parameterType="int" resultType="int">
+    select count(*) from work_score
+    where workid = #{workID,jdbcType=INTEGER}
+    order by isreaded asc
+  </select>
+    <select id="selectByWorkIDUserID" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from work_score
+        where workid = #{workID,jdbcType=INTEGER} and userid = #{userID,jdbcType=VARCHAR}
+    </select>
+  <select id="selectByWorkID" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from work_score
+    where workid = #{workID,jdbcType=INTEGER}
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from work_score
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByWorkID" parameterType="java.lang.Integer">
+    delete from work_score
+    where workid = #{workID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.CourseManage.pojo.WorkScore">
+    insert into work_score (id, workid, userid, 
+      score, chapter, part, 
+      isreaded, filename)
+    values (#{id,jdbcType=INTEGER}, #{workid,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{chapter,jdbcType=INTEGER}, #{part,jdbcType=INTEGER}, 
+      #{isreaded,jdbcType=TINYINT}, #{filename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.WorkScore">
+    insert into work_score
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="workid != null">
+        workid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="chapter != null">
+        chapter,
+      </if>
+      <if test="part != null">
+        part,
+      </if>
+      <if test="isreaded != null">
+        isreaded,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workid != null">
+        #{workid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="chapter != null">
+        #{chapter,jdbcType=INTEGER},
+      </if>
+      <if test="part != null">
+        #{part,jdbcType=INTEGER},
+      </if>
+      <if test="isreaded != null">
+        #{isreaded,jdbcType=TINYINT},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.WorkScore">
+    update work_score
+    <set>
+      <if test="workid != null">
+        workid = #{workid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="chapter != null">
+        chapter = #{chapter,jdbcType=INTEGER},
+      </if>
+      <if test="part != null">
+        part = #{part,jdbcType=INTEGER},
+      </if>
+      <if test="isreaded != null">
+        isreaded = #{isreaded,jdbcType=TINYINT},
+      </if>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.WorkScore">
+    update work_score
+    set workid = #{workid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      chapter = #{chapter,jdbcType=INTEGER},
+      part = #{part,jdbcType=INTEGER},
+      isreaded = #{isreaded,jdbcType=TINYINT},
+      filename = #{filename,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateFileByWorkIDUserID" parameterType="com.CourseManage.pojo.WorkScore">
+    update work_score
+    set score = #{score,jdbcType=INTEGER},
+      chapter = #{chapter,jdbcType=INTEGER},
+      part = #{part,jdbcType=INTEGER},
+      isreaded = #{isreaded,jdbcType=TINYINT},
+      filename = #{filename,jdbcType=VARCHAR}
+    where workid = #{workid,jdbcType=INTEGER} and userid = #{userid,jdbcType=VARCHAR}
+  </update>
+</mapper>

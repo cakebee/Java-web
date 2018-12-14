@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.Question">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="questime" jdbcType="TIMESTAMP" property="questime" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, courseid, userid, questime, content, title
+  </sql>
+  <select id="selectQuestionCount" resultType="int" parameterType="int">
+        select count(*) from question
+        where courseid = #{courseID,jdbcType=INTEGER}
+    </select>
+  <select id="selectUserQuestionCount" resultType="int" parameterType="java.lang.String">
+        select count(*) from question
+        where userid = #{userName,jdbcType=INTEGER}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectSummaryByCourseId" parameterType="Map" resultType="com.CourseManage.pojo.Question">
+    select id, courseid, title, userid, questime
+    <include refid="Base_Column_List" />
+    from question
+    where courseid = #{courseID,jdbcType=INTEGER}
+    order by questime desc
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <select id="selectSummaryByUserName" parameterType="Map" resultType="com.CourseManage.pojo.Question">
+    select id, courseid, title, userid, questime
+    <include refid="Base_Column_List" />
+    from question
+    where userId = #{userName,jdbcType=INTEGER}
+    order by questime desc
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <select id="selectByUserName" parameterType="java.lang.String" resultType="com.CourseManage.pojo.Question">
+    select
+    <include refid="Base_Column_List" />
+    from question
+    where userid = #{userName,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.CourseManage.pojo.Question">
+    insert into question (id, courseid, userid, 
+      questime, content, title
+      )
+    values (#{id,jdbcType=INTEGER}, #{courseid,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, 
+      #{questime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.Question">
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseid != null">
+        courseid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="questime != null">
+        questime,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseid != null">
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="questime != null">
+        #{questime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.Question">
+    update question
+    <set>
+      <if test="courseid != null">
+        courseid = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="questime != null">
+        questime = #{questime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.Question">
+    update question
+    set courseid = #{courseid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=VARCHAR},
+      questime = #{questime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

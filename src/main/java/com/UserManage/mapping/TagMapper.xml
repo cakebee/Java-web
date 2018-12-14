@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.UserManage.dao.TagMapper">
+  <resultMap id="BaseResultMap" type="com.UserManage.pojo.Tag">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="citednum" jdbcType="INTEGER" property="citednum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tag, citednum
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tags
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tags
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.UserManage.pojo.Tag">
+    insert into tags (id, tag, citednum
+      )
+    values (#{id,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, #{citednum,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.UserManage.pojo.Tag">
+    insert into tags
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="citednum != null">
+        citednum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="citednum != null">
+        #{citednum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.UserManage.pojo.Tag">
+    update tags
+    <set>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="citednum != null">
+        citednum = #{citednum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.UserManage.pojo.Tag">
+    update tags
+    set tag = #{tag,jdbcType=VARCHAR},
+      citednum = #{citednum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAllTags" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tags
+  </select>
+
+  <select id="selectTagPK" parameterType="String" resultType="java.lang.Integer">
+    select
+    id
+    from tags
+    where tag = #{tagname,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateCitedNumByPrimaryKey" parameterType="java.lang.Integer">
+    update tags
+    set
+      citednum = citednum+1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="decreaseCitedNumByPrimaryKey" parameterType="java.lang.Integer">
+    update tags
+    set
+      citednum = citednum-1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

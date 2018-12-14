@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.UserManage.dao.UserImageMapper">
+  <resultMap id="BaseResultMap" type="com.UserManage.pojo.UserImage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.UserManage.pojo.UserImage">
+    <result column="userimage" jdbcType="LONGVARBINARY" property="userimage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid
+  </sql>
+  <sql id="Blob_Column_List">
+    userimage
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user_image
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_image
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.UserManage.pojo.UserImage">
+    insert into user_image (id, userid, userimage
+      )
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{userimage,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.UserManage.pojo.UserImage">
+    insert into user_image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="userimage != null">
+        userimage,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="userimage != null">
+        #{userimage,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.UserManage.pojo.UserImage">
+    update user_image
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="userimage != null">
+        userimage = #{userimage,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.UserManage.pojo.UserImage">
+    update user_image
+    set userid = #{userid,jdbcType=VARCHAR},
+      userimage = #{userimage,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.UserManage.pojo.UserImage">
+    update user_image
+    set userid = #{userid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUserid" parameterType="String" resultMap="ResultMapWithBLOBs">
+      select
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+      from user_image
+      where userid = #{userid,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByUserid" parameterType="com.UserManage.pojo.UserImage" >
+    update user_image
+    set userimage = #{userimage,jdbcType=LONGVARBINARY}
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+</mapper>

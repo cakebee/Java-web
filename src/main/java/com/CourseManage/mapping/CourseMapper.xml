@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManage.dao.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.CourseManage.pojo.Course">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="coursename" jdbcType="VARCHAR" property="coursename" />
+    <result column="coursetype" jdbcType="VARCHAR" property="coursetype" />
+    <result column="teacher" jdbcType="VARCHAR" property="teacher" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, coursename, coursetype, teacher, intro, price, flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.CourseManage.pojo.Course" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into course (id, coursename, coursetype, 
+      teacher, intro, price)
+    values (#{id,jdbcType=INTEGER}, #{coursename,jdbcType=VARCHAR}, #{coursetype,jdbcType=VARCHAR}, 
+      #{teacher,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, #{price,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.CourseManage.pojo.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="coursename != null">
+        coursename,
+      </if>
+      <if test="coursetype != null">
+        coursetype,
+      </if>
+      <if test="teacher != null">
+        teacher,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="coursename != null">
+        #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursetype != null">
+        #{coursetype,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null">
+        #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.CourseManage.pojo.Course">
+    update course
+    <set>
+      <if test="coursename != null">
+        coursename = #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursetype != null">
+        coursetype = #{coursetype,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null">
+        teacher = #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.CourseManage.pojo.Course">
+    update course
+    set coursename = #{coursename,jdbcType=VARCHAR},
+      coursetype = #{coursetype,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      price = #{price,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where teacher = #{teacher}
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectAllByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectKeyCourseByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where coursename like #{keywords,jdbcType=VARCHAR} and flag = 1
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+
+  <select id="selectKeyTeacherByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where teacher = #{keywords,jdbcType=VARCHAR} and flag = 1
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectPassCourseByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where flag = 1
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectTypeCourseByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where coursetype like #{keywords,jdbcType=VARCHAR} and flag = 1
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectMyInterestTypeCourseByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where
+    <foreach collection="tags" index="index" item="item" open="(" separator="or" close=")">
+       coursetype = #{item}
+    </foreach>
+    and flag = 1
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectCount" parameterType="String" resultType="int">
+    select count(*) from course
+    where teacher = #{keywords,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectCountAll"  resultType="int">
+    select count(*) from course
+  </select>
+
+  <select id="selectKeyCourseCount"  parameterType="String" resultType="int">
+    select count(*) from course
+    where coursename like #{keywords,jdbcType=VARCHAR} and flag = 1
+  </select>
+
+  <select id="selectKeyTeacherCount"  parameterType="String" resultType="int">
+    select count(*) from course
+    where teacher = #{keywords,jdbcType=VARCHAR} and flag = 1
+  </select>
+
+  <select id="selectPassCourseCount"  resultType="int">
+    select count(*) from course
+    where flag = 1
+  </select>
+
+  <select id="selectKeyTypeCount"  parameterType="String" resultType="int">
+    select count(*) from course
+    where coursetype like #{keywords} and flag = 1
+  </select>
+
+  <select id="selectMyInterestTypeCourseCount"  parameterType="java.util.List" resultType="int">
+    select count(*) from course
+    where flag = 1 and
+    <foreach collection="list" index="index" item="item" open="(" separator="or" close=")">
+       coursetype = #{item}
+    </foreach>
+  </select>
+
+  <update id="updateCourse" parameterType="com.CourseManage.pojo.Course">
+    update course
+    set
+      coursename = #{coursename,jdbcType=VARCHAR},
+      coursetype = #{coursetype,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPageadmin" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where  flag = 0
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <select id="selectCountadmin" resultType="int">
+    select
+      count(*)
+    from course
+    where flag = 0
+  </select>
+
+  <update id="updateflagByid1" parameterType="java.lang.Integer">
+    update course
+    set
+      flag = 1
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateflagByid2" parameterType="java.lang.Integer">
+    update course
+    set
+      flag = 2
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectHotCourses" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course
+    where flag = 1 and
+    <foreach collection="list" index="index" item="item" open="(" separator="or" close=")">
+      id = #{item}
+    </foreach>
+    limit 0,5
+  </select>
+
+</mapper>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.UserManage.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.UserManage.pojo.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="core" jdbcType="INTEGER" property="core" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, email, password, type, core, address, sex, sign
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.UserManage.pojo.User">
+    insert into user (id, username, email, 
+      password, type, core, 
+      address, sex, sign)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{core,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.UserManage.pojo.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="core != null">
+        core,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="core != null">
+        #{core,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.UserManage.pojo.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="core != null">
+        core = #{core,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.UserManage.pojo.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      core = #{core,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUsername" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="check"  parameterType="String" resultType="String">
+    select
+    type
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+
+  </select>
+
+  <select id="selectByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="int">
+    select count(*) from user
+  </select>
+
+  <update id="updateByUsername" parameterType="com.UserManage.pojo.User">
+    update user
+    set
+      email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      core = #{core,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR}
+      where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteByUsername" parameterType="String">
+    delete from user
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateOthersByUsername" parameterType="com.UserManage.pojo.User">
+    update user
+    set
+      email = #{email,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR}
+      where username = #{username,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectIntegralRank" parameterType="String" resultType="int">
+    SELECT b.rownum FROM
+    (
+      SELECT t.*, @rownum := @rownum + 1 AS rownum
+      FROM (SELECT @rownum := 0) r,
+     (SELECT * FROM user ORDER BY core DESC) AS t
+    ) AS b WHERE b.username = #{username,jdbcType=VARCHAR};
+  </select>
+
+  <update id="updatePassByUsername" parameterType="com.UserManage.pojo.User">
+    update user
+    set
+      password = #{password,jdbcType=VARCHAR}
+      where username = #{username,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MessageManage.dao.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.MessageManage.pojo.Message">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sendid" jdbcType="VARCHAR" property="sendid" />
+    <result column="receid" jdbcType="VARCHAR" property="receid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime" />
+    <result column="flag" jdbcType="TINYINT" property="flag" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="receiver" jdbcType="TINYINT" property="receiver" />
+    <result column="sender" jdbcType="TINYINT" property="sender" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sendid, receid, content, sendtime, flag, title, receiver, sender
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectReceCount" resultType="int" parameterType="java.lang.String">
+    select count(*) from message
+    where receid = #{receID,jdbcType=VARCHAR} and receiver = 0
+  </select>
+  <select id="selectSendCount" resultType="int" parameterType="java.lang.String">
+    select count(*) from message
+    where sendid = #{sendID,jdbcType=VARCHAR} and sender = 0
+  </select>
+  <select id="selectAllByReceId" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from message
+    where receid = #{receID,jdbcType=VARCHAR}
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <select id="selectAllBySendId" parameterType="java.lang.String" resultType="com.MessageManage.pojo.Message">
+    select
+    <include refid="Base_Column_List" />
+    from message
+    where sendid = #{sendID,jdbcType=VARCHAR}
+    <if test="start!=null and size!=null">
+      limit #{start},#{size}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.MessageManage.pojo.Message">
+    insert into message (id, sendid, receid, 
+      content, sendtime, flag, 
+      title, receiver, sender
+      )
+    values (#{id,jdbcType=INTEGER}, #{sendid,jdbcType=VARCHAR}, #{receid,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{sendtime,jdbcType=TIMESTAMP}, #{flag,jdbcType=TINYINT}, 
+      #{title,jdbcType=VARCHAR}, #{receiver,jdbcType=TINYINT}, #{sender,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.MessageManage.pojo.Message">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sendid != null">
+        sendid,
+      </if>
+      <if test="receid != null">
+        receid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="sendtime != null">
+        sendtime,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sendid != null">
+        #{sendid,jdbcType=VARCHAR},
+      </if>
+      <if test="receid != null">
+        #{receid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=TINYINT},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.MessageManage.pojo.Message">
+    update message
+    <set>
+      <if test="sendid != null">
+        sendid = #{sendid,jdbcType=VARCHAR},
+      </if>
+      <if test="receid != null">
+        receid = #{receid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=TINYINT},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.MessageManage.pojo.Message">
+    update message
+    set sendid = #{sendid,jdbcType=VARCHAR},
+      receid = #{receid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      flag = #{flag,jdbcType=TINYINT},
+      title = #{title,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=TINYINT},
+      sender = #{sender,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
